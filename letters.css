@@ -1,10 +1,14 @@
 /* ============================================================
-   OPEN WHEN... — letters page
+   OPEN WHEN... — letters page (blue / black / white romantic)
    ------------------------------------------------------------
-   Mist #e6f0fa  Periwinkle #a9c4e8  Cornflower #6f8fc9
-   Ocean #3f5f97  Sky #c8e0f5  Cream #f6fbff  Ink #2e3a52
-   Blush #f4c2d0  Rose #d98ba8  Gold #e8c88a
-   Lavender #d4c8ec  Peach #ffd9c2  Mint #bfe6d8
+   Deep black:  #0a0f1a   (main background)
+   Ink black:   #131a2b   (cards)
+   Soft white:  #f5f8ff   (primary text)
+   Frost white: #e6edf5   (secondary text)
+   Sky blue:    #6fa8dc   (primary accent)
+   Ice blue:    #a8c8e8   (light accent)
+   Royal blue:  #3d6fa8   (deep accent)
+   Pure white:  #ffffff   (headings, highlights)
    ============================================================ */
 
 /* ----- reset & base ----- */
@@ -13,11 +17,15 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  color: #2e3a52;
+  color: #f5f8ff;
   line-height: 1.7;
   min-height: 100vh;
   padding: 60px 20px 80px;
-  background: linear-gradient(180deg, #f6fbff 0%, #e6f0fa 30%, #e0e4f5 60%, #d8e6f5 100%);
+  background: #0a0f1a;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(61, 111, 168, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(111, 168, 220, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(19, 26, 43, 1) 0%, #0a0f1a 100%);
   background-attachment: fixed;
   overflow-x: hidden;
 }
@@ -38,11 +46,12 @@ body {
 .header h1 {
   font-family: 'Great Vibes', cursive;
   font-size: 4rem;
-  color: #3f5f97;
+  color: #ffffff;
+  text-shadow: 0 0 25px rgba(111, 168, 220, 0.5);
   line-height: 1.2;
   margin-bottom: 10px;
 }
-.header p { font-size: 1.1rem; font-weight: 300; color: #3a4a6a; }
+.header p { font-size: 1.1rem; font-weight: 300; color: #a8c8e8; }
 
 /* ----- letters grid ----- */
 .letters-grid {
@@ -52,8 +61,8 @@ body {
 }
 
 .letter-card {
-  background: linear-gradient(160deg, #ffffff 0%, #eef5ff 100%);
-  border: 1px solid rgba(111, 143, 201, 0.22);
+  background: linear-gradient(160deg, #131a2b 0%, #0f1523 100%);
+  border: 1px solid rgba(111, 168, 220, 0.25);
   border-radius: 24px;
   padding: 26px 24px;
   cursor: pointer;
@@ -65,57 +74,52 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(90, 130, 190, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 
 .letter-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 35px rgba(90, 130, 190, 0.22);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(111, 168, 220, 0.3);
+  border-color: #6fa8dc;
 }
-
-/* each card gets its own accent border on hover */
-.letter-card:nth-child(1):hover { border-color: #f4c2d0; }
-.letter-card:nth-child(2):hover { border-color: #e8c88a; }
-.letter-card:nth-child(3):hover { border-color: #bfe6d8; }
-.letter-card:nth-child(4):hover { border-color: #d4c8ec; }
-.letter-card:nth-child(5):hover { border-color: #d98ba8; }
-.letter-card:nth-child(6):hover { border-color: #a9c4e8; }
 
 .letter-icon {
   font-size: 2.2rem;
   margin-bottom: 14px;
-  transition: transform 0.3s ease;
+  color: #6fa8dc;
+  text-shadow: 0 0 20px rgba(111, 168, 220, 0.7);
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* each icon gets a unique accent color */
-.letter-card:nth-child(1) .letter-icon { color: #d98ba8; }
-.letter-card:nth-child(2) .letter-icon { color: #e8c88a; }
-.letter-card:nth-child(3) .letter-icon { color: #6f8fc9; }
-.letter-card:nth-child(4) .letter-icon { color: #bfe6d8; }
-.letter-card:nth-child(5) .letter-icon { color: #d4c8ec; }
-.letter-card:nth-child(6) .letter-icon { color: #a9c4e8; }
-
-.letter-card:hover .letter-icon { transform: scale(1.15) rotate(-8deg); }
+.letter-card:hover .letter-icon {
+  transform: scale(1.15) rotate(-8deg);
+  color: #ffffff;
+  text-shadow: 0 0 30px rgba(168, 200, 232, 1);
+}
 
 .letter-title {
   font-family: 'Great Vibes', cursive;
   font-size: 1.7rem;
-  color: #3f5f97;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(111, 168, 220, 0.35);
 }
 
 .letter-hint {
   font-size: 0.82rem;
-  color: #7a8aa8;
+  color: #8aa8c8;
   margin-top: 6px;
   font-weight: 300;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 /* ----- expanded state ----- */
 .letter-card.open {
   grid-column: 1 / -1;
-  background: linear-gradient(160deg, #ffffff 0%, #f4e2ea 100%);
-  border-color: #d98ba8;
+  background: linear-gradient(160deg, #131a2b 0%, #0f1523 100%);
+  border-color: #6fa8dc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(111, 168, 220, 0.35);
   min-height: 0;
   padding: 40px 34px;
   cursor: default;
@@ -138,14 +142,15 @@ body {
 .letter-body h3 {
   font-family: 'Great Vibes', cursive;
   font-size: 2rem;
-  color: #3f5f97;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(111, 168, 220, 0.45);
   margin-bottom: 18px;
   text-align: center;
 }
 
 .letter-body p {
   font-size: 1.05rem;
-  color: #2e3a52;
+  color: #e6edf5;
   font-weight: 300;
   margin-bottom: 14px;
   line-height: 1.8;
@@ -155,7 +160,8 @@ body {
   text-align: right;
   font-family: 'Great Vibes', cursive;
   font-size: 1.6rem;
-  color: #d98ba8;
+  color: #6fa8dc;
+  text-shadow: 0 0 12px rgba(111, 168, 220, 0.5);
   margin-top: 20px;
 }
 
@@ -170,14 +176,14 @@ body {
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  background: linear-gradient(120deg, #6f8fc9, #a9c4e8);
-  box-shadow: 0 8px 18px rgba(90, 130, 190, 0.3);
+  background: linear-gradient(120deg, #3d6fa8, #6fa8dc);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5), 0 0 15px rgba(111, 168, 220, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .close-btn:hover {
   transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 12px 22px rgba(90, 130, 190, 0.4);
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.6), 0 0 25px rgba(111, 168, 220, 0.7);
 }
 
 /* ----- back link ----- */
@@ -185,14 +191,20 @@ body {
 
 .back-link {
   display: inline-block;
-  color: #6f8fc9;
+  color: #6fa8dc;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
+  text-shadow: 0 0 10px rgba(111, 168, 220, 0.4);
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.back-link:hover { color: #d98ba8; transform: translateX(-3px); }
+.back-link:hover {
+  color: #ffffff;
+  transform: translateX(-3px);
+  text-shadow: 0 0 20px rgba(168, 200, 232, 0.8);
+}
+
 .back-link i { margin-right: 6px; }
 
 /* ----- responsive ----- */
