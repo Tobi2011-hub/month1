@@ -1,104 +1,96 @@
 // ============================================================
+//  ⚙️  CONFIG
+// ============================================================
+const CONFIG = {
+  herName: 'Simi',
+  songLink: 'https://www.youtube.com/',
+  secretMessage:
+    "Not everyone looks for the little things. But you always do — that's one of the reasons I like you."
+};
+
+// ============================================================
 //  FLOATING BACKGROUND HEARTS
 // ============================================================
-(function createFloatingHearts() {
+(function () {
   const bg = document.getElementById('bgHearts');
   if (!bg) return;
 
-  const heartCount = 20;
-
-  for (let i = 0; i < heartCount; i++) {
+  for (let i = 0; i < 20; i++) {
     const heart = document.createElement('i');
     heart.classList.add('fas', 'fa-heart');
 
-    const size     = Math.random() * 1.8 + 1.2;
-    const left     = Math.random() * 100;
-    const top      = Math.random() * 100;
-    const delay    = Math.random() * 12;
-    const duration = Math.random() * 8 + 8;
+    const isBlush = Math.random() < 0.3;
+    let r, g, b;
+    if (isBlush) {
+      r = 230 + Math.floor(Math.random() * 25);
+      g = 160 + Math.floor(Math.random() * 40);
+      b = 180 + Math.floor(Math.random() * 40);
+    } else {
+      r = 120 + Math.floor(Math.random() * 80);
+      g = 150 + Math.floor(Math.random() * 60);
+      b = 200 + Math.floor(Math.random() * 55);
+    }
 
-    // random pink-ish / lavender-ish tint
-    const g = 100 + Math.floor(Math.random() * 80);
-    const b = 120 + Math.floor(Math.random() * 60);
-
-    heart.style.left = left + '%';
-    heart.style.top = top + '%';
-    heart.style.fontSize = size + 'rem';
-    heart.style.animationDelay = delay + 's';
-    heart.style.animationDuration = duration + 's';
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.top = Math.random() * 100 + '%';
+    heart.style.fontSize = (Math.random() * 1.8 + 1.2) + 'rem';
+    heart.style.animationDelay = Math.random() * 12 + 's';
+    heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
     heart.style.opacity = Math.random() * 0.2 + 0.08;
-    heart.style.color = `rgba(255, ${g}, ${b}, 0.25)`;
+    heart.style.color = `rgba(${r}, ${g}, ${b}, 0.28)`;
 
     bg.appendChild(heart);
   }
 })();
 
 // ============================================================
-//  COUNTDOWN (counting UP from August 28)
+//  COUNTDOWN — counts up from August 28
 // ============================================================
-// JavaScript months are 0-indexed: 0 = Jan, 7 = Aug, 11 = Dec.
-// Format: new Date(year, month, day, hours, minutes, seconds)
-//
-// Aug 28 of THIS year:
 const startDate = new Date(new Date().getFullYear(), 7, 28, 0, 0, 0);
-//
-// Aug 28 of LAST year (uncomment if needed):
-// const startDate = new Date(new Date().getFullYear() - 1, 7, 28, 0, 0, 0);
-//
-// Fixed year (uncomment if needed):
-// const startDate = new Date(2025, 7, 28, 0, 0, 0);
-
 const daysEl    = document.getElementById('days');
 const hoursEl   = document.getElementById('hours');
 const minutesEl = document.getElementById('minutes');
 const secondsEl = document.getElementById('seconds');
-
 let lastSecond = null;
 
 function updateCountdown() {
-  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+  if (!daysEl) return;
 
   const diff = new Date() - startDate;
 
-  // If the date is in the future, show zeros instead of negatives
   if (diff < 0) {
-    daysEl.textContent    = '00';
-    hoursEl.textContent   = '00';
-    minutesEl.textContent = '00';
-    secondsEl.textContent = '00';
+    daysEl.textContent = hoursEl.textContent =
+      minutesEl.textContent = secondsEl.textContent = '00';
     return;
   }
 
-  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours   = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const days    = Math.floor(diff / 86400000);
+  const hours   = Math.floor((diff / 3600000) % 24);
+  const minutes = Math.floor((diff / 60000) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
   daysEl.textContent    = String(days).padStart(2, '0');
   hoursEl.textContent   = String(hours).padStart(2, '0');
   minutesEl.textContent = String(minutes).padStart(2, '0');
 
-  // pulse the seconds digit only when it changes
   if (lastSecond !== seconds) {
     secondsEl.textContent = String(seconds).padStart(2, '0');
     secondsEl.classList.remove('pulse');
-    void secondsEl.offsetWidth; // force reflow to restart animation
+    void secondsEl.offsetWidth;
     secondsEl.classList.add('pulse');
     lastSecond = seconds;
   }
 }
-
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
 // ============================================================
-//  SCROLL REVEAL (works for note, things, timeline, promise)
+//  SCROLL REVEAL
 // ============================================================
-(function scrollReveal() {
+(function () {
   const elements = document.querySelectorAll('.reveal');
   if (!elements.length) return;
 
-  // Fallback: if IntersectionObserver isn't available, just show them
   if (!('IntersectionObserver' in window)) {
     elements.forEach(el => el.classList.add('active'));
     return;
@@ -111,10 +103,7 @@ setInterval(updateCountdown, 1000);
         obs.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
-  });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
   elements.forEach(el => observer.observe(el));
 })();
@@ -125,16 +114,14 @@ setInterval(updateCountdown, 1000);
 document.querySelectorAll('.navbar a').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     const targetId = this.getAttribute('href');
+    if (!targetId.startsWith('#')) return;
 
-    // Only prevent default if the target actually exists on the page
     const target = targetId === '#home'
       ? document.body
       : document.querySelector(targetId);
-
     if (!target) return;
 
     e.preventDefault();
-
     if (targetId === '#home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -142,3 +129,166 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
     }
   });
 });
+
+// ============================================================
+//  CUSTOM CURSOR
+// ============================================================
+(function () {
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const dot  = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  if (!dot || !ring) return;
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let dotX = mouseX, dotY = mouseY;
+  let ringX = mouseX, ringY = mouseY;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  (function animate() {
+    dotX  += (mouseX - dotX) * 0.4;
+    dotY  += (mouseY - dotY) * 0.4;
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+
+    dot.style.transform  = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animate);
+  })();
+
+  document.querySelectorAll('a, button, label, input, .thing-item, .timeline-content, .promise-list li')
+    .forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+})();
+
+// ============================================================
+//  SCROLL PROGRESS BAR
+// ============================================================
+(function () {
+  const bar = document.getElementById('scrollProgress');
+  if (!bar) return;
+
+  function update() {
+    const h = document.documentElement;
+    const total = h.scrollHeight - h.clientHeight;
+    bar.style.width = (total > 0 ? (h.scrollTop / total) * 100 : 0) + '%';
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+// ============================================================
+//  SECTION SWEEP
+// ============================================================
+(function () {
+  const sections = document.querySelectorAll('section');
+  if (!sections.length) return;
+
+  sections.forEach(s => s.classList.add('section-sweep'));
+
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(s => s.classList.add('swept'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('swept', entry.isIntersecting);
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => observer.observe(s));
+})();
+
+// ============================================================
+//  TIME-OF-DAY GREETING
+// ============================================================
+(function () {
+  const el = document.getElementById('greeting');
+  if (!el) return;
+
+  const hour = new Date().getHours();
+  let text;
+  if (hour >= 5 && hour < 12)       text = 'Good morning';
+  else if (hour >= 12 && hour < 17) text = 'Good afternoon';
+  else if (hour >= 17 && hour < 22) text = 'Good evening';
+  else                              text = 'Still awake?';
+
+  el.innerHTML = `${text}, <span>${CONFIG.herName || 'my love'}</span>`;
+})();
+
+// ============================================================
+//  MUSIC TOGGLE
+// ============================================================
+(function () {
+  const btn = document.getElementById('musicToggle');
+  if (!btn) return;
+
+  let playing = false;
+
+  btn.addEventListener('click', () => {
+    playing = !playing;
+    btn.classList.toggle('playing', playing);
+    btn.querySelector('i').className = playing ? 'fas fa-pause' : 'fas fa-music';
+
+    if (playing && CONFIG.songLink) {
+      window.open(CONFIG.songLink, '_blank', 'noopener');
+    }
+  });
+})();
+
+// ============================================================
+//  KONAMI CODE → SECRET MESSAGE
+// ============================================================
+(function () {
+  const sequence = [
+    'ArrowUp', 'ArrowUp',
+    'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight',
+    'ArrowLeft', 'ArrowRight',
+    'b', 'a'
+  ];
+
+  let index = 0;
+  const modal = document.getElementById('secretModal');
+  const textEl = document.getElementById('secretText');
+  const closeBtn = document.getElementById('secretClose');
+
+  if (!modal) return;
+  if (textEl && CONFIG.secretMessage) textEl.textContent = CONFIG.secretMessage;
+
+  function close() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  document.addEventListener('keydown', e => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (key === sequence[index]) {
+      index++;
+      if (index === sequence.length) {
+        index = 0;
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+    } else {
+      index = (key === sequence[0]) ? 1 : 0;
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) close();
+  });
+})();
