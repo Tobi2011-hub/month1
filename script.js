@@ -9,15 +9,35 @@ const CONFIG = {
 };
 
 // ============================================================
+//  HELPERS
+// ============================================================
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+function rand(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function pad2(n) {
+  return String(n).padStart(2, '0');
+}
+
+// ============================================================
 //  FLOATING BACKGROUND HEARTS
 // ============================================================
-(function () {
+(function createFloatingHearts() {
   const bg = document.getElementById('bgHearts');
   if (!bg) return;
 
-  for (let i = 0; i < 20; i++) {
+  // fewer hearts on mobile for performance
+  const count = window.innerWidth < 700 ? 12 : 20;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < count; i++) {
     const heart = document.createElement('i');
     heart.classList.add('fas', 'fa-heart');
+    heart.setAttribute('aria-hidden', 'true');
 
     const isBlush = Math.random() < 0.3;
     let r, g, b;
@@ -31,67 +51,80 @@ const CONFIG = {
       b = 200 + Math.floor(Math.random() * 55);
     }
 
-    heart.style.left = Math.random() * 100 + '%';
-    heart.style.top = Math.random() * 100 + '%';
-    heart.style.fontSize = (Math.random() * 1.8 + 1.2) + 'rem';
-    heart.style.animationDelay = Math.random() * 12 + 's';
-    heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
-    heart.style.opacity = Math.random() * 0.2 + 0.08;
+    heart.style.left = rand(0, 100) + '%';
+    heart.style.top = rand(0, 100) + '%';
+    heart.style.fontSize = rand(1.2, 3.0) + 'rem';
+    heart.style.animationDelay = rand(0, 12) + 's';
+    heart.style.animationDuration = rand(8, 16) + 's';
+    heart.style.opacity = rand(0.08, 0.28);
     heart.style.color = `rgba(${r}, ${g}, ${b}, 0.28)`;
 
-    bg.appendChild(heart);
+    fragment.appendChild(heart);
   }
+
+  bg.appendChild(fragment);
 })();
 
 // ============================================================
 //  COUNTDOWN — counts up from August 28
 // ============================================================
-const startDate = new Date(new Date().getFullYear(), 7, 28, 0, 0, 0);
-const daysEl    = document.getElementById('days');
-const hoursEl   = document.getElementById('hours');
-const minutesEl = document.getElementById('minutes');
-const secondsEl = document.getElementById('seconds');
-let lastSecond = null;
+(function initCountdown() {
+  // August = month index 7 (JS months are 0-indexed)
+  const startDate = new Date(new Date().getFullYear(), 7, 28, 0, 0, 0);
 
-function updateCountdown() {
-  if (!daysEl) return;
+  const daysEl    = document.getElementById('days');
+  const hoursEl   = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
 
-  const diff = new Date() - startDate;
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
 
-  if (diff < 0) {
-    daysEl.textContent = hoursEl.textContent =
-      minutesEl.textContent = secondsEl.textContent = '00';
-    return;
+  let lastSecond = null;
+
+  function updateCountdown() {
+    const diff = Date.now() - startDate.getTime();
+
+    // if the date is in the future, show zeros
+    if (diff < 0) {
+      daysEl.textContent    = '00';
+      hoursEl.textContent   = '00';
+      minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
+      return;
+    }
+
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff / 3600000) % 24);
+    const minutes = Math.floor((diff / 60000) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    daysEl.textContent    = pad2(days);
+    hoursEl.textContent   = pad2(hours);
+    minutesEl.textContent = pad2(minutes);
+
+    if (lastSecond !== seconds) {
+      secondsEl.textContent = pad2(seconds);
+      secondsEl.classList.remove('pulse');
+      void secondsEl.offsetWidth;   // restart the animation
+      secondsEl.classList.add('pulse');
+      lastSecond = seconds;
+    }
   }
 
-  const days    = Math.floor(diff / 86400000);
-  const hours   = Math.floor((diff / 3600000) % 24);
-  const minutes = Math.floor((diff / 60000) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-
-  daysEl.textContent    = String(days).padStart(2, '0');
-  hoursEl.textContent   = String(hours).padStart(2, '0');
-  minutesEl.textContent = String(minutes).padStart(2, '0');
-
-  if (lastSecond !== seconds) {
-    secondsEl.textContent = String(seconds).padStart(2, '0');
-    secondsEl.classList.remove('pulse');
-    void secondsEl.offsetWidth;
-    secondsEl.classList.add('pulse');
-    lastSecond = seconds;
-  }
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
 
 // ============================================================
 //  SCROLL REVEAL
 // ============================================================
-(function () {
+(function initScrollReveal() {
   const elements = document.querySelectorAll('.reveal');
   if (!elements.length) return;
 
-  if (!('IntersectionObserver' in window)) {
+  // if IntersectionObserver isn't supported OR reduced motion is on,
+  // just show everything immediately
+  if (!('IntersectionObserver' in window) || prefersReducedMotion) {
     elements.forEach(el => el.classList.add('active'));
     return;
   }
@@ -103,7 +136,10 @@ setInterval(updateCountdown, 1000);
         obs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  });
 
   elements.forEach(el => observer.observe(el));
 })();
@@ -111,30 +147,32 @@ setInterval(updateCountdown, 1000);
 // ============================================================
 //  SMOOTH SCROLL for navbar links
 // ============================================================
-document.querySelectorAll('.navbar a').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const targetId = this.getAttribute('href');
-    if (!targetId.startsWith('#')) return;
+(function initSmoothScroll() {
+  document.querySelectorAll('.navbar a[href^="#"], .drawer-link[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (!targetId || !targetId.startsWith('#')) return;
 
-    const target = targetId === '#home'
-      ? document.body
-      : document.querySelector(targetId);
-    if (!target) return;
+      const target = targetId === '#home'
+        ? document.body
+        : document.querySelector(targetId);
+      if (!target) return;
 
-    e.preventDefault();
-    if (targetId === '#home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+      e.preventDefault();
+      if (targetId === '#home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
-});
+})();
 
 // ============================================================
 //  CUSTOM CURSOR
 // ============================================================
-(function () {
-  if (window.matchMedia('(hover: none)').matches) return;
+(function initCustomCursor() {
+  if (isTouchDevice || prefersReducedMotion) return;
 
   const dot  = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
@@ -162,41 +200,57 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
     requestAnimationFrame(animate);
   })();
 
-  document.querySelectorAll('a, button, label, input, .thing-item, .timeline-content, .promise-list li')
-    .forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
+  // use event delegation so it also works for elements added later
+  document.body.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, label, input, .thing-item, .timeline-content, .promise-list li, .nav-link, .drawer-link')) {
+      document.body.classList.add('cursor-hover');
+    }
+  });
+  document.body.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, label, input, .thing-item, .timeline-content, .promise-list li, .nav-link, .drawer-link')) {
+      document.body.classList.remove('cursor-hover');
+    }
+  });
 })();
 
 // ============================================================
 //  SCROLL PROGRESS BAR
 // ============================================================
-(function () {
+(function initScrollProgress() {
   const bar = document.getElementById('scrollProgress');
   if (!bar) return;
+
+  let ticking = false;
 
   function update() {
     const h = document.documentElement;
     const total = h.scrollHeight - h.clientHeight;
     bar.style.width = (total > 0 ? (h.scrollTop / total) * 100 : 0) + '%';
+    ticking = false;
   }
 
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
+  function requestUpdate() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
   update();
 })();
 
 // ============================================================
 //  SECTION SWEEP
 // ============================================================
-(function () {
+(function initSectionSweep() {
   const sections = document.querySelectorAll('section');
   if (!sections.length) return;
 
   sections.forEach(s => s.classList.add('section-sweep'));
 
-  if (!('IntersectionObserver' in window)) {
+  if (!('IntersectionObserver' in window) || prefersReducedMotion) {
     sections.forEach(s => s.classList.add('swept'));
     return;
   }
@@ -213,7 +267,7 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
 // ============================================================
 //  TIME-OF-DAY GREETING
 // ============================================================
-(function () {
+(function initGreeting() {
   const el = document.getElementById('greeting');
   if (!el) return;
 
@@ -230,16 +284,17 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
 // ============================================================
 //  MUSIC TOGGLE
 // ============================================================
-(function () {
+(function initMusicToggle() {
   const btn = document.getElementById('musicToggle');
   if (!btn) return;
 
+  const icon = btn.querySelector('i');
   let playing = false;
 
   btn.addEventListener('click', () => {
     playing = !playing;
     btn.classList.toggle('playing', playing);
-    btn.querySelector('i').className = playing ? 'fas fa-pause' : 'fas fa-music';
+    if (icon) icon.className = playing ? 'fas fa-pause' : 'fas fa-music';
 
     if (playing && CONFIG.songLink) {
       window.open(CONFIG.songLink, '_blank', 'noopener');
@@ -250,7 +305,7 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
 // ============================================================
 //  KONAMI CODE → SECRET MESSAGE
 // ============================================================
-(function () {
+(function initKonami() {
   const sequence = [
     'ArrowUp', 'ArrowUp',
     'ArrowDown', 'ArrowDown',
@@ -259,7 +314,6 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
     'b', 'a'
   ];
 
-  let index = 0;
   const modal = document.getElementById('secretModal');
   const textEl = document.getElementById('secretText');
   const closeBtn = document.getElementById('secretClose');
@@ -267,19 +321,30 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
   if (!modal) return;
   if (textEl && CONFIG.secretMessage) textEl.textContent = CONFIG.secretMessage;
 
+  let index = 0;
+
+  function open() {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
   function close() {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
   }
 
   document.addEventListener('keydown', e => {
+    // ignore if she's typing somewhere
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
     const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
     if (key === sequence[index]) {
       index++;
       if (index === sequence.length) {
         index = 0;
-        modal.classList.add('active');
-        modal.setAttribute('aria-hidden', 'false');
+        open();
       }
     } else {
       index = (key === sequence[0]) ? 1 : 0;
@@ -291,4 +356,129 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && modal.classList.contains('active')) close();
   });
+})();
+
+// ============================================================
+//  NAVBAR — brand + toggle + drawer + active link detection
+// ============================================================
+(function enhanceNavbar() {
+  const navbar      = document.getElementById('mainNav');
+  const toggle      = document.getElementById('navToggle');
+  const drawer      = document.getElementById('navDrawer');
+  const backdrop    = document.getElementById('navBackdrop');
+  const inlineLinks = document.querySelectorAll('.nav-link');
+  const drawerLinks = document.querySelectorAll('.drawer-link');
+
+  if (!navbar) return;
+
+  // ---------- mobile drawer ----------
+  function openDrawer() {
+    if (!drawer) return;
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+    toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (toggle && drawer && backdrop) {
+    toggle.addEventListener('click', () => {
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+    backdrop.addEventListener('click', closeDrawer);
+    drawerLinks.forEach(l => l.addEventListener('click', closeDrawer));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+  }
+
+  // ---------- scrolled state ----------
+  let ticking = false;
+  function updateScrolled() {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    ticking = false;
+  }
+  function requestScrolled() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateScrolled);
+    }
+  }
+  window.addEventListener('scroll', requestScrolled, { passive: true });
+  updateScrolled();
+
+  // ---------- active link detection ----------
+  // 1) External pages
+  const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const pageMap = {
+    'quiz.html': 'Quiz',
+    'letters.html': 'Letters',
+    'thisorthat.html': 'This or That',
+    'notes.html': 'Notes'
+  };
+
+  function highlightPageLink() {
+    const label = pageMap[currentPage];
+    if (!label) return;
+    [...inlineLinks, ...drawerLinks].forEach(l => {
+      if (l.textContent.trim() === label) l.classList.add('active');
+    });
+  }
+  highlightPageLink();
+
+  // 2) In-page sections
+  const sectionLinks = Array.from(inlineLinks).filter(l => {
+    const href = l.getAttribute('href');
+    return href && href.startsWith('#');
+  });
+
+  if (sectionLinks.length && 'IntersectionObserver' in window) {
+    const linkMap = {};
+    sectionLinks.forEach(link => {
+      const id = link.getAttribute('href').slice(1);
+      linkMap[id] = link;
+    });
+
+    const sectionEls = Object.keys(linkMap)
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    function setActive(id) {
+      [...inlineLinks, ...drawerLinks].forEach(l => l.classList.remove('active'));
+      sectionLinks.forEach(l => {
+        if (l.getAttribute('href') === `#${id}`) l.classList.add('active');
+      });
+      drawerLinks.forEach(l => {
+        if (l.getAttribute('href') === `#${id}`) l.classList.add('active');
+      });
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    }, {
+      rootMargin: '-45% 0px -45% 0px',
+      threshold: 0
+    });
+
+    sectionEls.forEach(s => observer.observe(s));
+
+    // force "home" when at the very top
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < 100 && linkMap['home']) setActive('home');
+    }, { passive: true });
+  }
 })();
