@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0f1a">
+  <meta name="description" content="Open when... little letters for the moments you need them most.">
   <title>Open When... 💌</title>
 
   <!-- Favicon — tiny heart -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%99%3C/text%3E%3C/svg%3E">
 
+  <!-- Preconnect for speed -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
@@ -21,25 +27,24 @@
 
   <!-- Letters stylesheet -->
   <link rel="stylesheet" href="letters.css">
-
-  
 </head>
 <body>
 
   <!-- floating background hearts -->
-  <div class="bg-hearts" id="bgHearts"></div>
+  <div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
 
   <div class="container">
 
     <!-- header -->
     <header class="header">
       <h1>Open When...</h1>
-      <p>Letters for the moments you need them most. 💌</p>
+      <p>Little letters for the moments you need them most. 💌</p>
     </header>
 
     <!-- letters grid -->
     <div class="letters-grid" id="lettersGrid">
 
+      <!-- 1. MISS ME -->
       <div class="letter-card">
         <div class="letter-icon"><i class="fas fa-heart"></i></div>
         <div class="letter-title">Open when you miss me</div>
@@ -54,8 +59,9 @@
         </div>
       </div>
 
+      <!-- 2. SAD -->
       <div class="letter-card">
-        <div class="letter-icon"><i class="fas fa-sun"></i></div>
+        <div class="letter-icon"><i class="fas fa-cloud-rain"></i></div>
         <div class="letter-title">Open when you're sad</div>
         <div class="letter-hint">tap to open</div>
         <div class="letter-body">
@@ -68,28 +74,75 @@
         </div>
       </div>
 
+      <!-- 3. ANNOYED -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-fire"></i></div>
+        <div class="letter-title">Open when you're annoyed</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're annoyed</h3>
+          <p>Okay. Deep breath. Whatever it is that's got you like this — I'm not going to tell you to calm down. Because that never helps. Not when I do it either.</p>
+          <p>So instead: rant. To me, to the wall, to your notes app. Say all the things you'd never say out loud. Get it out of your chest so it stops living there.</p>
+          <p>And when you're done — I'm still here. Still yours. Even if some of it was about me. Especially if some of it was about me.</p>
+          <p>We'll figure it out. We always do.</p>
+          <div class="sig">— still yours</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 4. ANGRY AT ME -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-bolt"></i></div>
+        <div class="letter-title">Open when you're mad at me</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're mad at me</h3>
+          <p>If you're reading this, I probably said or did something dumb. That tracks.</p>
+          <p>I'm not going to make excuses in a letter. But here's what I want you to know: I never want to hurt you. Ever. If I did, it was me being careless, not me being cruel.</p>
+          <p>When you're ready — tell me. Tell me exactly what it was and how it felt. I'll listen without defending myself. And I'll do better. Not because I have to, but because it's you.</p>
+          <div class="sig">— sorry, and yours</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 5. CAN'T SLEEP -->
       <div class="letter-card">
         <div class="letter-icon"><i class="fas fa-moon"></i></div>
         <div class="letter-title">Open when you can't sleep</div>
         <div class="letter-hint">tap to open</div>
         <div class="letter-body">
           <h3>Open when you can't sleep</h3>
-          <p>Hi, insomniac.</p>
-          <p>Put your phone down after this, okay? </p>
+          <p>Hi, insomniac. Welcome to the club. I'm probably awake too.</p>
+          <p>Put your phone down after this, okay? But first, imagine this: me, talking to you in that quiet voice I only use for you, until you drift off.</p>
           <p>You're safe. Nothing bad is happening at 3am that can't wait until morning. Sleep, love.</p>
           <div class="sig">— goodnight</div>
           <button class="close-btn">Close</button>
         </div>
       </div>
 
+      <!-- 6. LAUGH -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-laugh-beam"></i></div>
+        <div class="letter-title">Open when you need a laugh</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you need a laugh</h3>
+          <p>Remember that time I tried to be cool and completely failed? Yeah. That.</p>
+          <p>Also: I still think about the joke you made that one time and I laugh out loud in public like a weirdo. You've ruined me.</p>
+          <p>If this didn't work — text me. I'll send you the worst pun I know. It's genuinely terrible.</p>
+          <div class="sig">— your favorite idiot</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
 
+      <!-- 7. PROUD -->
       <div class="letter-card">
         <div class="letter-icon"><i class="fas fa-star"></i></div>
         <div class="letter-title">Open when you're proud</div>
         <div class="letter-hint">tap to open</div>
         <div class="letter-body">
           <h3>Open when you're proud of yourself</h3>
-          <p>This is the one I've been waiting for.</p>
+          <p>YES. YES. This is the one I've been waiting for.</p>
           <p>Tell me everything. I want the whole story, every detail, even the boring parts. Especially the boring parts.</p>
           <p>I'm so proud of you I could burst. And honestly? I always am. Today just means you finally see it too.</p>
           <div class="sig">— your biggest fan</div>
@@ -97,6 +150,7 @@
         </div>
       </div>
 
+      <!-- 8. JUST BECAUSE -->
       <div class="letter-card">
         <div class="letter-icon"><i class="fas fa-envelope-open-text"></i></div>
         <div class="letter-title">Open when you just want to hear from me</div>
@@ -107,6 +161,186 @@
           <p>I like you. A lot. More than I know how to say without sounding cheesy. So I'm not going to try.</p>
           <p>Just: I like you. And I'm glad it's you.</p>
           <div class="sig">— me</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 9. NERVOUS -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-wind"></i></div>
+        <div class="letter-title">Open when you're nervous</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're nervous</h3>
+          <p>Your heart is doing that fast thing. Your hands feel weird. I know the feeling.</p>
+          <p>Here's what I want you to remember: you don't have to be perfect. You just have to show up as you. That's always been enough for me. It will be enough for them.</p>
+          <p>And whatever happens — I'll be right here after. Win, lose, or something in between.</p>
+          <div class="sig">— you've got this</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 10. OVERTHINKING -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-cloud"></i></div>
+        <div class="letter-title">Open when you're overthinking</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're overthinking</h3>
+          <p>Okay. Stop. Whatever your brain is spinning right now — I promise it's louder than it is true.</p>
+          <p>Ask yourself: is this a fact, or is this a fear? If it's a fear, it doesn't get to run the whole show.</p>
+          <p>And if you can't untangle it alone — untangle it with me. That's what I'm here for. That's what we are.</p>
+          <div class="sig">— breathe</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 11. INSECURE -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-mirror"></i></div>
+        <div class="letter-title">Open when you feel insecure</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you feel insecure</h3>
+          <p>I need you to hear this in my voice. Not your inner critic's voice — mine.</p>
+          <p>You are not too much. You are not too little. You are not too anything. You are exactly you, and that is the thing I keep choosing.</p>
+          <p>Every part of you I've seen — the loud parts, the quiet parts, the messy ones — I like all of them. There is nothing about you I need you to hide.</p>
+          <div class="sig">— every bit of you</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 12. BIRTHDAY -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-birthday-cake"></i></div>
+        <div class="letter-title">Open on your birthday</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Happy birthday, love</h3>
+          <p>I hope today feels soft. I hope people spoil you. I hope something small and silly makes you laugh so hard you forget to be polite about it.</p>
+          <p>I'm so glad you were born. I'm so glad the world has you in it. I'm so glad I get to know you.</p>
+          <p>This year, I hope you get everything you've been quietly hoping for. And I hope I get to watch.</p>
+          <div class="sig">— happy birthday</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 13. WORRIED -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-shield-heart"></i></div>
+        <div class="letter-title">Open when you're worried about us</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're worried about us</h3>
+          <p>Hey. Take a second.</p>
+          <p>Every relationship has a wobble. Every single one. It doesn't mean something is broken — it means we're two people, learning each other, figuring it out.</p>
+          <p>We are okay. And if we're not okay today, we'll be okay tomorrow. Because I'm not going anywhere. And I know you're not either.</p>
+          <div class="sig">— us, always</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 14. GREAT DAY -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-sun"></i></div>
+        <div class="letter-title">Open when you've had a great day</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you've had a great day</h3>
+          <p>Yes. YES. I love this for you.</p>
+          <p>Tell me everything. I want the tiny details, the random moments, the part that made you smile on the way home. I want all of it.</p>
+          <p>And I want you to remember this feeling next time a day doesn't go the way you hoped. Because you get to have days like this. You get to have so many of them.</p>
+          <div class="sig">— always cheering</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 15. GUILTY -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-feather"></i></div>
+        <div class="letter-title">Open when you feel guilty</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you feel guilty</h3>
+          <p>Whatever it is — I forgive you. Even before you ask. Even if you don't think you deserve it.</p>
+          <p>Guilt is just love pointing at something you want to fix. It doesn't mean you're bad. It means you care.</p>
+          <p>So do the fix. Apologize if you need to. And then put it down. You don't have to carry it forever.</p>
+          <div class="sig">— forgiven, always</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 16. MISSING HOME -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-house-heart"></i></div>
+        <div class="letter-title">Open when you miss home</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you miss home</h3>
+          <p>I know the ache. That low kind of missing, where everything feels just a little bit off.</p>
+          <p>Here's the thing — home isn't a place. Not really. It's people. It's the feeling of being known. And you're known. You're so known.</p>
+          <p>Whenever you're ready, I'm a text away. A voice note away. Whatever you need.</p>
+          <div class="sig">— always near</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 17. DOUBTING -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-compass"></i></div>
+        <div class="letter-title">Open when you doubt yourself</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you doubt yourself</h3>
+          <p>You're doubting yourself again. I can tell.</p>
+          <p>Let me be the voice that reminds you: you have survived every single thing that's ever tried to knock you down. Every one. And you did it before you even knew how.</p>
+          <p>You don't have to feel ready. You just have to keep going. And I'll be right here, believing in you the whole way.</p>
+          <div class="sig">— I see you</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 18. OUR MONTH -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-calendar-heart"></i></div>
+        <div class="letter-title">Open on our anniversary</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Happy anniversary, love</h3>
+          <p>Another month of us. Another month of you being my favorite part of every day.</p>
+          <p>I don't say it enough, so here it is in writing: I'm proud of us. I'm proud of how we talk, how we fix things, how we keep choosing each other even when it would be easier not to.</p>
+          <p>Here's to the next one. And the one after. And every single one after that.</p>
+          <div class="sig">— always us</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 19. LAZY DAY -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-mug-hot"></i></div>
+        <div class="letter-title">Open when you're bored</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you're bored</h3>
+          <p>Hi. You're bored. Perfect. Let's fix that.</p>
+          <p>Pick one: send me the weirdest fact you know. Send me a song you'd never admit you like. Send me a photo of the nearest object to you right now. Any of these.</p>
+          <p>Or just tell me what you're thinking about. I'm nosy. I want to know.</p>
+          <div class="sig">— entertain me</div>
+          <button class="close-btn">Close</button>
+        </div>
+      </div>
+
+      <!-- 20. THANKFUL -->
+      <div class="letter-card">
+        <div class="letter-icon"><i class="fas fa-hands-praying"></i></div>
+        <div class="letter-title">Open when you feel grateful</div>
+        <div class="letter-hint">tap to open</div>
+        <div class="letter-body">
+          <h3>Open when you feel grateful</h3>
+          <p>I love that you're here. In this moment, in this soft feeling.</p>
+          <p>Tell me what you're grateful for. I want to know. I want to know what makes your heart feel full right now.</p>
+          <p>And just so you know — the thing I'm most grateful for is you. Not the idea of you. The actual you. Right here. Right now.</p>
+          <div class="sig">— so grateful</div>
           <button class="close-btn">Close</button>
         </div>
       </div>

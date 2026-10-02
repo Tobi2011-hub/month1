@@ -72,3 +72,19 @@
     });
   });
 })();
+
+// reveal cards as they enter the viewport
+const cards = document.querySelectorAll('.letter-card');
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 40);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(c => observer.observe(c));
+} else {
+  cards.forEach(c => c.classList.add('visible'));
+}
